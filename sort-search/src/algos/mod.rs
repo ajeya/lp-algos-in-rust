@@ -76,10 +76,6 @@ pub mod counting {
             count_vec[vec[i] as usize] -= 1;
         }
 
-        // for i in 0..sorted_vec.len() {
-
-        // vec[i] = sorted_vec[i];
-        // }
         vec[..sorted_vec.len()].copy_from_slice(&sorted_vec[..]);
     }
 }
