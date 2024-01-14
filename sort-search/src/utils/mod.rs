@@ -14,18 +14,24 @@ pub fn get_i32(prompt: &str) -> i32 {
         .expect("Error reading input");
 
     let trimmed = str_value.trim();
-    return trimmed.parse::<i32>().expect("Error parsing integer");
+    trimmed.parse::<i32>().expect("Error parsing integer")
 }
 
 pub struct Prng {
     seed: u32,
 }
 
+impl Default for Prng {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Prng {
     pub fn new() -> Self {
         let mut prng = Self { seed: 0 };
         prng.randomize();
-        return prng;
+        prng
     }
 
     pub fn randomize(&mut self) {
@@ -40,20 +46,20 @@ impl Prng {
     pub fn next_u32(&mut self) -> u32 {
         self.seed = self.seed.wrapping_mul(1_103_515_245).wrapping_add(12_345);
         self.seed %= 1 << 31;
-        return self.seed;
+        self.seed
     }
 
     // Return a pseudorandom value in the range [0.0, 1.0).
     pub fn next_f64(&mut self) -> f64 {
         let f = self.next_u32() as f64;
-        return f / (2147483647.0 + 1.0);
+        f / (2147483647.0 + 1.0)
     }
 
     // Return a pseudorandom value in the range [min, max).
     pub fn next_i32(&mut self, min: i32, max: i32) -> i32 {
         let range = (max - min) as f64;
         let result = min as f64 + range * self.next_f64();
-        return result as i32;
+        result as i32
     }
 }
 
@@ -66,7 +72,7 @@ pub fn make_random_vec(num_items: i32, max: i32) -> Vec<i32> {
     for _ in 0..num_items {
         vec.push(prng.next_i32(0, max));
     }
-    return vec;
+    vec
 }
 
 // Print at most num_items items.
@@ -77,17 +83,17 @@ pub fn print_vec(vec: &Vec<i32>, num_items: i32) {
     }
 
     let mut string = String::new();
-    string.push_str("[");
+    string.push('[');
 
     if max > 0usize {
         string.push_str(&vec[0].to_string());
     }
 
-    for i in 1usize..max {
-        string.push_str(" ");
-        string.push_str(&vec[i].to_string());
+    for item in vec.iter().take(max).skip(1usize) {
+        string.push(' ');
+        string.push_str(&item.to_string());
     }
-    string.push_str("]");
+    string.push(']');
     println!("{string}");
 }
 

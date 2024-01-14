@@ -10,7 +10,19 @@ fn main() {
     prng.randomize();
 
     println!("saving values into vector");
-    let vv = utils::make_random_vec(1000, 10000);
+    let vv = utils::make_random_vec(10000, 10000);
+
+    // Bubble sort
+    let mut v = vv.clone();
+    utils::check_sorted(&v);
+    let start = Instant::now();
+    algos::bubble::sort(&mut v);
+    let duration = start.elapsed();
+    utils::check_sorted(&v);
+
+    println!("bubble sorting done, time taken: {duration:?}");
+
+    // quick sort
     let mut v = vv.clone();
     // let mut v = vec![94, 91, 93, 84, 82, 20];
     utils::check_sorted(&v);
@@ -21,15 +33,16 @@ fn main() {
 
     println!("quick sorting done, time taken: {duration:?}");
 
+    // counting sort
     let mut v = vv.clone();
     // let mut v = vec![94, 91, 93, 84, 82, 20];
     utils::check_sorted(&v);
     let start = Instant::now();
-    algos::bubble::sort(&mut v);
+    algos::counting::sort(&mut v);
     let duration = start.elapsed();
     utils::check_sorted(&v);
 
-    println!("quick sorting done, time taken: {duration:?}")
+    println!("counting sorting done, time taken: {duration:?}");
 }
 
 // Unit tests
@@ -38,7 +51,11 @@ mod tests {
     use sort_search::algos;
 
     fn verify(vec: &mut Vec<i32>, sorted: &Vec<i32>) {
-        let algos = vec![algos::bubble::sort, algos::quick::sort];
+        let algos = vec![
+            algos::bubble::sort,
+            algos::quick::sort,
+            algos::counting::sort,
+        ];
         for algo in algos {
             algo(vec);
             assert_eq!(sorted, vec)
