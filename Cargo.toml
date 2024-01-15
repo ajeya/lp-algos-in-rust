@@ -1,5 +1,6 @@
 [workspace]
 members = [
-  "sort-search"
+  "sort-search",
+  "recursion",
 ]
 resolver="2"
