@@ -1,6 +1,8 @@
 extern crate sort_search;
 
-use sort_search::{algos, utils};
+use sort_search::algos::sorting;
+use sort_search::utils;
+
 use std::time::Instant;
 
 fn main() {
@@ -16,7 +18,7 @@ fn main() {
     let mut v = vv.clone();
     utils::check_sorted(&v);
     let start = Instant::now();
-    algos::bubble::sort(&mut v);
+    sorting::bubble::sort(&mut v);
     let duration = start.elapsed();
     utils::check_sorted(&v);
 
@@ -27,7 +29,7 @@ fn main() {
     // let mut v = vec![94, 91, 93, 84, 82, 20];
     utils::check_sorted(&v);
     let start = Instant::now();
-    algos::quick::sort(&mut v);
+    sorting::quick::sort(&mut v);
     let duration = start.elapsed();
     utils::check_sorted(&v);
 
@@ -38,7 +40,7 @@ fn main() {
     // let mut v = vec![94, 91, 93, 84, 82, 20];
     utils::check_sorted(&v);
     let start = Instant::now();
-    algos::counting::sort(&mut v);
+    sorting::counting::sort(&mut v);
     let duration = start.elapsed();
     utils::check_sorted(&v);
 
@@ -48,13 +50,13 @@ fn main() {
 // Unit tests
 #[cfg(test)]
 mod tests {
-    use sort_search::algos;
+    use sort_search::algos::sorting;
 
     fn verify(vec: &mut Vec<i32>, sorted: &Vec<i32>) {
         let algos = vec![
-            algos::bubble::sort,
-            algos::quick::sort,
-            algos::counting::sort,
+            sorting::bubble::sort,
+            sorting::quick::sort,
+            sorting::counting::sort,
         ];
         for algo in algos {
             algo(vec);
