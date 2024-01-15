@@ -7,7 +7,7 @@ fn factorial(n: i64) -> i64 {
 }
 
 fn main() {
-    for n in 0..22 {
+    for n in 0..5 {
         println!("{}! = {}", n, factorial(n))
     }
 }
