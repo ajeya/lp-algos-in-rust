@@ -12,7 +12,7 @@ fn main() {
     prng.randomize();
 
     println!("saving values into vector");
-    let vv = utils::make_random_vec(10000, 10000);
+    let vv = utils::make_random_vec(100000, 10000);
 
     // Bubble sort
     let mut v = vv.clone();
