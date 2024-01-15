@@ -1,6 +1,6 @@
 extern crate sort_search;
 
-use sort_search::algos::searching;
+use sort_search::algos;
 use sort_search::utils;
 
 fn main() {
@@ -15,10 +15,10 @@ fn main() {
         if target == -1 {
             break;
         }
-        let (index, search_count) = searching::linear::search(&vec, target);
+        let (index, search_count) = algos::linear_search(&vec, target);
         println!("numbers[{index}] = {target}, {search_count} tests");
 
-        let (index, search_count) = searching::binary::search(&vec, target);
+        let (index, search_count) = algos::binary_search(&vec, target);
         println!("numbers[{index}] = {target}, {search_count} tests");
     }
 }
