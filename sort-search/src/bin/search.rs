@@ -17,5 +17,8 @@ fn main() {
         }
         let (index, search_count) = searching::linear::search(&vec, target);
         println!("numbers[{index}] = {target}, {search_count} tests");
+
+        let (index, search_count) = searching::binary::search(&vec, target);
+        println!("numbers[{index}] = {target}, {search_count} tests");
     }
 }
