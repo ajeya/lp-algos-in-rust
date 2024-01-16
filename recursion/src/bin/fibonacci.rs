@@ -44,7 +44,13 @@ fn fibonacci_bottom_up(n: i64) -> i64 {
 }
 
 fn fibonacci_on_the_fly(values: &mut Vec<i64>, n: i64) -> i64 {
-    0
+    if let Some(&value) = values.get(n as usize) {
+        return value;
+    }
+
+    let value = fibonacci_on_the_fly(values, n - 1) + fibonacci_on_the_fly(values, n - 2);
+    values.push(value);
+    value
 }
 
 fn main() {
@@ -61,13 +67,14 @@ fn main() {
         let start = Instant::now();
         println!("Recursive fibonacci: {}", fibonacci(n));
         let duration = start.elapsed();
-        println!("Fill on the fly took {duration:?}");
+        println!("Recursive took {duration:?}");
+
         // Calculate the Fibonacci number.
         // println!("Prefilled:  {}", prefilled_values[n as usize]);
         let start = Instant::now();
         println!(
-            "*** On the fly: {}",
-            fibonacci_on_the_fly(&mut fill_on_the_fly_values, 10)
+            "On the fly: {}",
+            fibonacci_on_the_fly(&mut fill_on_the_fly_values, n)
         );
         let duration = start.elapsed();
         println!("Fill on the fly took {duration:?}");
@@ -75,7 +82,7 @@ fn main() {
         let start = Instant::now();
         println!("Bottom up:  {}", fibonacci_bottom_up(n));
         let duration = start.elapsed();
-        println!("Fill on the fly took {duration:?}");
+        println!("Bottom up took {duration:?}");
         println!();
     }
 }
