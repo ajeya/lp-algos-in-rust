@@ -7,7 +7,7 @@ const INUM_ROWS: i32 = NUM_ROWS as i32;
 const INUM_COLS: i32 = NUM_COLS as i32;
 
 // Whether we want an open or closed tour.
-const REQUIRE_CLOSED_TOUR: bool = true;
+const REQUIRE_CLOSED_TOUR: bool = false;
 
 // Value to represent a square that we have not visited.
 const UNVISITED: i32 = -1;
@@ -16,7 +16,7 @@ const UNVISITED: i32 = -1;
 // Return true or false to indicate whether we have found a solution.
 fn find_tour(
     board: &mut [[i32; NUM_COLS]; NUM_ROWS],
-    offsets: &mut [[i32; 2]; 8], // 8 possible moves, 2 coordinates each.
+    offsets: [[i32; 2]; 8], // 8 possible moves, 2 coordinates each.
     cur_row: i32,
     cur_col: i32,
     num_visited: i32,
@@ -25,11 +25,10 @@ fn find_tour(
         if !REQUIRE_CLOSED_TOUR {
             return true;
         }
-        for i in 0..8 {
-            let new_row = cur_row + offsets[i][0];
-            let new_col = cur_col + offsets[i][1];
+        for item in offsets.iter().take(8) {
+            let (new_row, new_col) = (cur_row + item[0], cur_col + item[1]);
 
-            if new_row < 0 || new_row >= INUM_ROWS || new_col < 0 || new_col >= INUM_COLS {
+            if !(0..INUM_ROWS).contains(&new_row) || !(0..INUM_COLS).contains(&new_col) {
                 continue;
             }
 
@@ -41,11 +40,10 @@ fn find_tour(
         }
     }
 
-    for i in 0..8 {
-        let new_row = cur_row + offsets[i][0];
-        let new_col = cur_col + offsets[i][1];
+    for item in offsets.iter().take(8) {
+        let (new_row, new_col) = (cur_row + item[0], cur_col + item[1]);
 
-        if new_row < 0 || new_row >= INUM_ROWS || new_col < 0 || new_col >= INUM_COLS {
+        if !(0..INUM_ROWS).contains(&new_row) || !(0..INUM_COLS).contains(&new_col) {
             continue;
         }
 
@@ -64,9 +62,9 @@ fn find_tour(
 }
 
 fn dump_board(board: &mut [[i32; NUM_COLS]; NUM_ROWS]) {
-    for i in 0..NUM_ROWS {
-        for j in 0..NUM_COLS {
-            print!("{} ", format!("{:0>2}", board[i][j]))
+    for i in board.iter().take(NUM_ROWS) {
+        for item in i.iter().take(NUM_COLS) {
+            print!("{:0>2} ", item)
         }
         println!()
     }
@@ -74,7 +72,7 @@ fn dump_board(board: &mut [[i32; NUM_COLS]; NUM_ROWS]) {
 
 fn main() {
     // Initialize the vector of move offsets.
-    let mut offsets = [
+    let offsets = [
         [-2, -1],
         [-1, -2],
         [2, -1],
@@ -93,7 +91,7 @@ fn main() {
 
     // Try to find a tour.
     let start = Instant::now();
-    let success = find_tour(&mut board, &mut offsets, 0, 0, 1);
+    let success = find_tour(&mut board, offsets, 0, 0, 1);
     let duration = start.elapsed();
     println!("Time: {:?}", duration);
 

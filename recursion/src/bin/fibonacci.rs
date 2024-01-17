@@ -16,7 +16,7 @@ fn get_i64(prompt: &str) -> i64 {
         .expect("Error reading input");
 
     let trimmed = str_value.trim();
-    return trimmed.parse::<i64>().expect("Error parsing integer");
+    trimmed.parse::<i64>().expect("Error parsing integer")
 }
 
 fn fibonacci(n: i64) -> i64 {
