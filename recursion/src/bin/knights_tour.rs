@@ -1,14 +1,13 @@
-#![allow(dead_code, unused)]
 use std::time::Instant;
 
 // The board dimensions.
-const NUM_ROWS: usize = 5;
+const NUM_ROWS: usize = 8;
 const NUM_COLS: usize = NUM_ROWS;
 const INUM_ROWS: i32 = NUM_ROWS as i32;
 const INUM_COLS: i32 = NUM_COLS as i32;
 
 // Whether we want an open or closed tour.
-const REQUIRE_CLOSED_TOUR: bool = false;
+const REQUIRE_CLOSED_TOUR: bool = true;
 
 // Value to represent a square that we have not visited.
 const UNVISITED: i32 = -1;
@@ -22,22 +21,33 @@ fn find_tour(
     cur_col: i32,
     num_visited: i32,
 ) -> bool {
-    if num_visited == (NUM_ROWS * NUM_COLS) as i32 {
-        return true;
+    if num_visited == (INUM_ROWS * INUM_COLS) {
+        if !REQUIRE_CLOSED_TOUR {
+            return true;
+        }
+        for i in 0..8 {
+            let new_row = cur_row + offsets[i][0];
+            let new_col = cur_col + offsets[i][1];
+
+            if new_row < 0 || new_row >= INUM_ROWS || new_col < 0 || new_col >= INUM_COLS {
+                continue;
+            }
+
+            if board[new_row as usize][new_col as usize] == 0 {
+                return true;
+            }
+
+            return false;
+        }
     }
 
     for i in 0..8 {
         let new_row = cur_row + offsets[i][0];
         let new_col = cur_col + offsets[i][1];
 
-        if new_row <= 0 || new_row >= INUM_ROWS || new_col <= 0 || new_col >= INUM_COLS {
+        if new_row < 0 || new_row >= INUM_ROWS || new_col < 0 || new_col >= INUM_COLS {
             continue;
         }
-
-        println!(
-            "i: {}, i:0 {}, i:1: {}, new_row: {}, new_col: {}, num_visited: {}",
-            i, offsets[i][0], offsets[i][1], new_row, new_col, num_visited
-        );
 
         if board[new_row as usize][new_col as usize] != UNVISITED {
             continue;
@@ -79,7 +89,7 @@ fn main() {
     let mut board = [[UNVISITED; NUM_COLS]; NUM_ROWS];
 
     // Start at board[0][0].
-    board[0][1] = 0;
+    board[0][0] = 0;
 
     // Try to find a tour.
     let start = Instant::now();
